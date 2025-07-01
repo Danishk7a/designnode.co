@@ -10,7 +10,7 @@ export default function Header(){
                 </Link>
 
                 <div className="sm:flex hidden gap-10 items-center">
-                    <Link href='/products'>Products</Link>
+                    <Link href='/products'>Products & Tools</Link>
                     <Link  href='/services'>Services</Link>
                     <Link  href=''>Industries</Link>
                     <Link  href='/insights'>Insights</Link>
@@ -37,7 +37,7 @@ function MobileHeader({showToggle}){
   `}
 >
 
-           <Link className="hover:bg-[#242424] p-3" href='/products'>Products</Link>
+           <Link className="hover:bg-[#242424] p-3" href='/products'>Products & Tools</Link>
                     <Link className="hover:bg-[#242424] p-3" href='/services'>Services</Link>
                     <Link className="hover:bg-[#242424] p-3" href=''>Industries</Link>
                     <Link className="hover:bg-[#242424] p-3"  href='/insights'>Insights</Link>

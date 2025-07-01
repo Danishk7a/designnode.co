@@ -48,6 +48,7 @@ export default function Footer(){
            
 
         </div>
+        {/* <Text /> */}
         </div>
     )
 }
@@ -58,4 +59,12 @@ function Section(){
       <div className="text-3xl">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet exercitationem nostrum magnam voluptate molestias dolor eaque repellat maiores excepturi <span className="text-black"> velit rem eos necessitatibus, quasi voluptatem veniam alias blanditiis voluptates consequuntur! Lorem ipsum dolor sit amet consectetur adipisicing elit.</span> Dolorem odio debitis nihil amet. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem adipisci corrupti, sequi laboriosam perferendis eveniet nihil exercitationem dolores, commodi corporis nam consectetur expedita.</div>
 
     </div>)
+}
+
+function Text(){
+    return (
+        <div className="flex justify-center items-center sm:text-[200px] text-[120px]">
+            Human Centric
+        </div>
+    )
 }

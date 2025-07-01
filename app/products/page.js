@@ -4,10 +4,10 @@ import Link from 'next/link';
 export default function product(){
  
  const products = [
-    {name:'p2x', desc:'Powerful tool for image processing', platform:'chrome',tags:'visual', link:'https://p2x.vercel.app/',img:'/p2x.png'},
-    {name:'3dev', desc:'Allow to add 3D Elements to your website', platform:'chrome',tags:'visual',link:'https://d3ddev.vercel.app/',img:'/3d.png'},
-    {name:'TypeCode', desc:'Make Coding tutorial videos', platform:'chrome',tags:'visual',link:'http://127.0.0.1:5500/Test.html',img:'/typeit.png'},
-    {name:'ColorUI', desc:'Choose Right Colors for your Design', platform:'chrome',tags:'visual',link:'https://colorui.co',img:'/colorui.png'},
+    {name:'p2x', desc:'Powerful tool for image processing', platform:'chrome',tags:'visual', link:'/products/p2x',img:'/p2x.png'},
+    {name:'3dev', desc:'Allow to add 3D Elements to your website', platform:'chrome',tags:'visual',link:'/products/3ddev',img:'/3d.png'},
+    {name:'TypeCode', desc:'Make Coding tutorial videos', platform:'chrome',tags:'visual',link:'/products/typeit',img:'/typeit.png'},
+    {name:'ColorUI', desc:'Choose Right Colors for your Design', platform:'chrome',tags:'visual',link:'/products/colors',img:'/colorui.png'},
  ]
     return(
         <div>
