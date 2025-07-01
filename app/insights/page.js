@@ -11,8 +11,8 @@ export default function insights(){
   return (
           <div className=" py-20 flex justify-center items-center gap-20 flex-wrap">
             
-            {posts.map((e)=>{
-              return <div className="flex hover:scale-[1.1] flex-col bg-black gap-3 rounded-2xl p-10" >
+            {posts.map((e,index)=>{
+              return <div key={index} className="flex hover:scale-[1.1] flex-col bg-black gap-3 rounded-2xl p-10" >
                 <div className="text-white" >{e.title}</div>
                 <div className="text-[14px]">{e.desc}</div>
 
