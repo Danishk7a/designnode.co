@@ -1,681 +1,79 @@
-<style>
-  body{
-    /* background-color: #1e1e1e;
-     */
-     background: linear-gradient(45deg,rgb(14, 20, 43),rgb(54, 32, 103));
-    margin: 0%;
-  }
-  #editorCanvas {
-    background-color: transparent;
-    cursor: text;
-    width: 100%;
-    height: 90vh;
-  }
-  #hiddenTextarea {
-    position: absolute;
-    opacity: 0;
-    left: -1000px;
-    top: -1000px;
-  }
-
-
-  /* The base track */
-.slider {
-  -webkit-appearance: none;  /* Remove default styling */
-  height: 3px;
-  background: #7b7b7b;
-  border-radius: 5px;
-  outline: none;
-  transition: background 0.3s;
-}
-
-/* On hover, change background */
-.slider:hover {
-  background: #ccc;
-}
-
-/* WebKit-based browsers (Chrome, Safari) - Thumb */
-.slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 15px;
-  height: 15px;
-  background: #8f8f8f;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.slider::-webkit-slider-thumb:hover {
-  background: #45a049;
-}
-
-/* Firefox */
-.slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  background: #2a2a2a;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-</style>
-
-<canvas id="editorCanvas" ></canvas>
-<br>
-
-
-<div id="bg-options-window" style="padding: 20px; position: absolute; bottom: 130px; left: 600px; border-radius:9px; background-color: #111111;display: none; gap: 20px; flex-wrap: wrap; width: 200px; height: 200px;">
-
-<div class="bg-options" style="cursor: pointer; height: 50px; width: 50px; border-radius: 50%; background-color: rgb(35, 35, 35);"></div>
-<div class="bg-options" style="cursor: pointer; height: 50px; width: 50px; border-radius: 50%; background-color: rgb(53, 34, 68);"></div>
-<div class="bg-options" style="cursor: pointer; height: 50px; width: 50px; border-radius: 50%; background-color: rgb(40, 36, 77);"></div>
-<div class="bg-options" style="cursor: pointer; height: 50px; width: 50px; border-radius: 50%; background-color: rgb(0, 0, 0);"></div>
-<div class="bg-options" style="cursor: pointer; height: 50px; width: 50px; border-radius: 50%; background-color: rgb(126, 126, 126);"></div>
-<div class="bg-options" style="cursor: pointer; height: 50px; width: 50px; border-radius: 50%; background-color: rgb(255, 255, 255);"></div>
-<div class="bg-options" style="cursor: pointer; height: 50px; width: 50px; border-radius: 50%; background-color: rgb(61, 58, 79);"></div>
-<div class="bg-options" style="cursor: pointer; height: 50px; width: 50px; border-radius: 50%; background-color: rgb(56, 36, 36);"></div>
-
-</div>
-
-<div style="display: flex;justify-content: center;width: 100%;">
-
-  <div style="display: flex;justify-content: space-between; padding: 0px 10px; align-items: center;border-radius: 30px; 
-  background-color: #111111;
-   width: 40%; height: 40px;">
-   
-<button style="display: flex;justify-content: center;align-items: center; background-color: #737373;border: none; cursor: pointer; border-radius:50% ; height: 20px; width: 20px;" id="typewriterBtn"><svg width="12" height="12" viewBox="0 0 16 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0.669438 1.76001C0.696444 1.53295 0.776048 1.31532 0.90192 1.12442C1.02779 0.933524 1.19646 0.774624 1.39452 0.660351C1.59258 0.546079 1.81457 0.479586 2.04283 0.46616C2.2711 0.452733 2.49935 0.492742 2.70944 0.583007C3.77144 1.03701 6.15144 2.11601 9.17144 3.85901C12.1924 5.60301 14.3174 7.12601 15.2404 7.81701C16.0284 8.40801 16.0304 9.58001 15.2414 10.173C14.3274 10.86 12.2284 12.363 9.17144 14.129C6.11144 15.895 3.75944 16.961 2.70744 17.409C1.80144 17.796 0.787438 17.209 0.669438 16.232C0.531438 15.09 0.273438 12.497 0.273438 8.99501C0.273438 5.49501 0.530438 2.90301 0.669438 1.76001Z" 
-fill="#242424"/>
-</svg>
-</button>
-
-<input class="slider" id="fontsize" value="16" type="range" min="4" max="100">
-<input class="slider" id="speed" value="30" type="range" min="0" max="200">
-<div id="bg" style="height: 20px; width: 20px; background:purple; border-radius: 50%;cursor: pointer;">
-
-</div>
-<button style="display: flex; justify-content: center;align-items: center; cursor: pointer;border-radius:50% ;border: none; background-color:#737373 ; height: 20px; width: 20px;" id="recordBtn">
-<img src="download.png" height="10px" width="10px" alt="">
-
-</button>
-
-<textarea id="hiddenTextarea" spellcheck="false"></textarea>
-  </div>
-
-</div>
-
-
-<script>
-const canvas = document.getElementById("editorCanvas");
-const ctx = canvas.getContext("2d");
-const textarea = document.getElementById("hiddenTextarea");
-const typewriterBtn = document.getElementById("typewriterBtn");
-const recordBtn = document.getElementById("recordBtn");
-
-
-    const displayWidth = window.innerWidth;
-    const displayHeight = window.innerHeight -100;
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = displayWidth * dpr;
-    canvas.height = displayHeight * dpr;
-    canvas.style.width = displayWidth + 'px';
-    canvas.style.height = displayHeight + 'px';
-    ctx.scale(dpr, dpr);
-
-
-let bgcolor = 'transparent'
-let fontSize = 26;
-let lineHeight = fontSize * 1.5;
-ctx.font = `${fontSize}px monospace`;
-
-let code = `const x = "hello";\nlet y = 'world';\nfor(let i=0; i<5; i++) {\n  console.log(x + y);\n}`;
-let cursorPos = 40;
-let selection = {start: null, end: null};
-let cursorVisible = true;
-let cursorInterval;
-let isTypingEffect = false;
-let showBgOptions = false;
-
-const previewBtn = document.getElementById('typewriterBtn')
-
-
-const keywords = ['const', 'let', 'var', 'for'];
-
-    document.getElementById('fontsize').addEventListener('input',(e)=>{
-      fontSize = e.target.value;
-      ctx.font = `${fontSize}px monospace`;
-      lineHeight = fontSize * 1.5;
-    })
-
- const bgOptionsWindow = document.getElementById('bg-options-window')
-        document.getElementById('bg').addEventListener('click',(e)=>{
-          if(showBgOptions){
-            showBgOptions = false
-          }else{
-            showBgOptions = true;
-          }
-
-         
-          showBgOptions? bgOptionsWindow.style.display = 'flex': bgOptionsWindow.style.display = 'none'
-    })
-    
-bgOptionsWindow.addEventListener('mouseleave',()=>{
-  bgOptionsWindow.style.display = 'none'
-
-})
-
-    document.querySelectorAll('.bg-options').forEach((e)=>{
-      e.addEventListener('click',()=>{
-         let color = getComputedStyle(e).backgroundColor
-
-         document.body.style.background = color
-        bgcolor = color
-      })
-    })
-
-   
-
-function tokenizeLine(line) {
-  const regex = /("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')|(\b\d+(\.\d+)?\b)|\b(const|let|var|for|function|print)\b|(\s+|[^\w\s])/g;
-  let result;
-  const tokens = [];
-  let lastIndex = 0;
-
-  while ((result = regex.exec(line)) !== null) {
-    // Add any text between matches as 'normal'
-    if (result.index > lastIndex) {
-      tokens.push({ text: line.slice(lastIndex, result.index), type: 'normal' });
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(45deg, #ff6ec7, #ff9a8b, #f4e1d2);
+      background-size: 400% 400%;
+      animation: gradientAnimation 10s ease infinite;
+      position: relative;
+      overflow: hidden;
     }
 
-    // Classify matched groups
-    if (result[1]) tokens.push({ text: result[1], type: 'string' });
-    else if (result[2]) tokens.push({ text: result[2], type: 'number' });
-    else if (result[4]) tokens.push({ text: result[4], type: 'keyword' });
-    else tokens.push({ text: result[5], type: 'normal' });
+    body::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://www.transparenttextures.com/patterns/white-dots.png');
+      pointer-events: none;
+      opacity: 0.1;
+    }
 
-    lastIndex = regex.lastIndex;
-  }
-
-  // Add any remaining text after the last match
-  if (lastIndex < line.length) {
-    tokens.push({ text: line.slice(lastIndex), type: 'normal' });
-  }
-
-  return tokens;
-}
-
-function renderEditor() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  const lines = code.split('\n');
-
-  lines.forEach((line, i) => {
-    let x = 40;
-    const y = 40 + (i + 1) * lineHeight;
-    const tokens = tokenizeLine(line);
-
-
-    tokens.forEach(token => {
-      // Text color based on type
-      let fillStyle = token.type === 'keyword' ? '#c678dd' :
-                      token.type === 'string' ? '#D69D85' : token.type ==='number'?'#87bd99':'#CCCCCC';
-
-      // Highlight selection if any
-      if (selection.start !== null && selection.end !== null) {
-        // Get global indices for each character to check if selected
-        for (let ci = 0; ci < token.text.length; ci++) {
-          const globalIndex = getGlobalIndex(i, line, ci);
-          const char = token.text[ci];
-
-          // Check if char selected
-          if (globalIndex >= Math.min(selection.start, selection.end) && globalIndex < Math.max(selection.start, selection.end)) {
-            // Draw selection bg
-            const charWidth = ctx.measureText(char).width;
-            ctx.fillStyle = '#555555';
-            ctx.fillRect(x, y - fontSize, charWidth, fontSize * 1.2);
-            ctx.fillStyle = '#FFFFFF'; // Selected text color
-          } else {
-            ctx.fillStyle = fillStyle;
-       
-         
-          }
-          ctx.fillText(char, x, y);
-          x += ctx.measureText(char).width;
-  
-        }
-      } else {
-        // No selection
-        ctx.fillStyle = fillStyle;
-        ctx.fillText(token.text, x, y);
-          //   ctx.shadowColor = fillStyle;
-          // ctx.shadowBlur = 50;
-        x += ctx.measureText(token.text).width;
+    @keyframes gradientAnimation {
+      0% {
+        background-position: 0% 50%;
       }
-    });
-  });
-
-  if (!isTypingEffect && cursorVisible) drawCursor();
-}
-
-function getGlobalIndex(lineNum, line, charIndex) {
-  let count = 0;
-  const lines = code.split('\n');
-  for (let i = 0; i < lineNum; i++) {
-    count += lines[i].length + 1; // +1 for \n
-  }
-  return count + charIndex;
-}
-
-function drawCursor() {
-  const lines = code.substring(0, cursorPos).split('\n');
-  const cursorLine = lines.length - 1;
-  const cursorCol = lines[cursorLine].length;
-
-  const cursorX = 40 + ctx.measureText(lines[cursorLine]).width;
-  const cursorY = 40 + (cursorLine + 1) * lineHeight;
-
-  ctx.fillStyle = '#FFFFFF';
-  ctx.fillRect(cursorX, cursorY - fontSize, 2, fontSize);
-}
-
-function toggleCursorBlink() {
-  if (cursorInterval) clearInterval(cursorInterval);
-  cursorInterval = setInterval(() => {
-    cursorVisible = !cursorVisible;
-    if(!isTypingEffect) renderEditor();
-  }, 500);
-}
-
-// --- Keyboard input handling ---
-textarea.addEventListener('keydown', e => {
-  if (isTypingEffect) {
-    e.preventDefault();
-    return;
-  }
-
-  const ctrl = e.ctrlKey || e.metaKey;
-  switch (true) {
-    case ctrl && e.key.toLowerCase() === 'a': // Select All
-      e.preventDefault();
-      selection.start = 0;
-      selection.end = code.length;
-      cursorPos = code.length;
-      renderEditor();
-      break;
-
-    case ctrl && e.key.toLowerCase() === 'c': // Copy
-      if (selection.start !== null && selection.end !== null && selection.start !== selection.end) {
-        e.preventDefault();
-        const selectedText = code.substring(Math.min(selection.start, selection.end), Math.max(selection.start, selection.end));
-        navigator.clipboard.writeText(selectedText);
+      50% {
+        background-position: 100% 50%;
       }
-      break;
-
-    case ctrl && e.key.toLowerCase() === 'v': // Paste
-      e.preventDefault();
-      navigator.clipboard.readText().then(clipText => {
-        replaceSelectionWith(clipText);
-      });
-      break;
-
-    case e.key === 'ArrowLeft':
-      e.preventDefault();
-      moveCursorLeft(e.shiftKey);
-      break;
-
-    case e.key === 'ArrowRight':
-      e.preventDefault();
-      moveCursorRight(e.shiftKey);
-      break;
-
-    case e.key === 'ArrowUp':
-      e.preventDefault();
-      moveCursorUp(e.shiftKey);
-      break;
-
-    case e.key === 'ArrowDown':
-      e.preventDefault();
-      moveCursorDown(e.shiftKey);
-      break;
-
-    case e.key === 'Backspace':
-      e.preventDefault();
-      backspace();
-      break;
-
-    case e.key === 'Delete':
-      e.preventDefault();
-      del();
-      break;
-
-    case e.key === 'Enter':
-      e.preventDefault();
-      insertText('\n');
-      break;
-
-    case e.key === 'Tab':
-      e.preventDefault();
-      insertText('  ');
-      break;
-
-    default:
-      if (e.key.length === 1 && !ctrl) {
-        insertText(e.key);
-        e.preventDefault();
+      100% {
+        background-position: 0% 50%;
       }
-      break;
-  }
-});
+    }
 
-function insertText(textToInsert) {
-  if (selection.start !== null && selection.end !== null && selection.start !== selection.end) {
-    replaceSelectionWith(textToInsert);
-  } else {
-    code = code.slice(0, cursorPos) + textToInsert + code.slice(cursorPos);
-    cursorPos += textToInsert.length;
-  }
-  clearSelection();
-  renderEditor();
-}
+    /* Canvas for noise effect */
+    #noiseCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="noiseCanvas"></canvas>
 
-function replaceSelectionWith(textToInsert) {
-  const start = Math.min(selection.start, selection.end);
-  const end = Math.max(selection.start, selection.end);
-  code = code.slice(0, start) + textToInsert + code.slice(end);
-  cursorPos = start + textToInsert.length;
-  clearSelection();
-  renderEditor();
-}
+  <script>
+    const canvas = document.getElementById('noiseCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-function clearSelection() {
-  selection.start = null;
-  selection.end = null;
-}
+    function generateNoise() {
+      const imageData = ctx.createImageData(canvas.width, canvas.height);
+      const data = imageData.data;
 
-function backspace() {
-  if (selection.start !== null && selection.end !== null && selection.start !== selection.end) {
-    replaceSelectionWith('');
-  } else if (cursorPos > 0) {
-    code = code.slice(0, cursorPos - 1) + code.slice(cursorPos);
-    cursorPos--;
-  }
-  clearSelection();
-  renderEditor();
-}
-
-function del() {
-  if (selection.start !== null && selection.end !== null && selection.start !== selection.end) {
-    replaceSelectionWith('');
-  } else if (cursorPos < code.length) {
-    code = code.slice(0, cursorPos) + code.slice(cursorPos + 1);
-  }
-  clearSelection();
-  renderEditor();
-}
-
-// Cursor movement helpers with shift to select
-function moveCursorLeft(shift) {
-  if (cursorPos > 0) {
-    if (shift) {
-      if (selection.start === null) {
-        selection.start = cursorPos;
-        selection.end = cursorPos - 1;
-      } else {
-        selection.end = Math.max(0, selection.end - 1);
+      for (let i = 0; i < data.length; i += 4) {
+        const rand = Math.random() * 255;
+        data[i] = rand; // Red
+        data[i + 1] = rand; // Green
+        data[i + 2] = rand; // Blue
+        data[i + 3] = 255; // Alpha
       }
-      cursorPos = Math.max(0, cursorPos - 1);
-    } else {
-      cursorPos--;
-      clearSelection();
-    }
-    renderEditor();
-  }
-}
 
-function moveCursorRight(shift) {
-  if (cursorPos < code.length) {
-    if (shift) {
-      if (selection.start === null) {
-        selection.start = cursorPos;
-        selection.end = cursorPos + 1;
-      } else {
-        selection.end = Math.min(code.length, selection.end + 1);
-      }
-      cursorPos = Math.min(code.length, cursorPos + 1);
-    } else {
-      cursorPos++;
-      clearSelection();
-    }
-    renderEditor();
-  }
-}
-
-function moveCursorUp(shift) {
-  const lines = code.split('\n');
-  const cursorLine = code.substring(0, cursorPos).split('\n').length - 1;
-  if (cursorLine === 0) return;
-  const currentCol = cursorPos - code.lastIndexOf('\n', cursorPos - 1) - 1;
-
-  const prevLineLength = lines[cursorLine - 1].length;
-  const newCol = Math.min(currentCol, prevLineLength);
-  cursorPos = code.split('\n').slice(0, cursorLine - 1).reduce((acc, val) => acc + val.length + 1, 0) + newCol;
-  if (shift) {
-    if (selection.start === null) {
-      selection.start = cursorPos;
-      selection.end = cursorPos;
-    }
-    selection.end = cursorPos;
-  } else {
-    clearSelection();
-  }
-  renderEditor();
-}
-
-function moveCursorDown(shift) {
-  const lines = code.split('\n');
-  const cursorLine = code.substring(0, cursorPos).split('\n').length - 1;
-  if (cursorLine === lines.length - 1) return;
-  const currentCol = cursorPos - code.lastIndexOf('\n', cursorPos - 1) - 1;
-
-  const nextLineLength = lines[cursorLine + 1].length;
-  const newCol = Math.min(currentCol, nextLineLength);
-  cursorPos = code.split('\n').slice(0, cursorLine + 1).reduce((acc, val) => acc + val.length + 1, 0) + newCol;
-  if (shift) {
-    if (selection.start === null) {
-      selection.start = cursorPos;
-      selection.end = cursorPos;
-    }
-    selection.end = cursorPos;
-  } else {
-    clearSelection();
-  }
-  renderEditor();
-}
-
-// --- Mouse click to move cursor and select text ---
-canvas.addEventListener('mousedown', e => {
-  if (isTypingEffect) return;
-
-  const rect = canvas.getBoundingClientRect();
-  const clickX = e.clientX - rect.left;
-  const clickY = e.clientY - rect.top;
-
-  const lineClicked = Math.floor((clickY - 10) / lineHeight);
-  const lines = code.split('\n');
-  if (lineClicked < 0) {
-    cursorPos = 0;
-    clearSelection();
-    renderEditor();
-    return;
-  }
-  if (lineClicked >= lines.length) {
-    cursorPos = code.length;
-    clearSelection();
-    renderEditor();
-    return;
-  }
-  // Calculate char index on clicked line
-  const lineText = lines[lineClicked];
-  let approxX = 10;
-  let charIndex = 0;
-  for (; charIndex < lineText.length; charIndex++) {
-    const charWidth = ctx.measureText(lineText[charIndex]).width;
-    if (approxX + charWidth / 2 >= clickX) break;
-    approxX += charWidth;
-  }
-
-  // Calculate global cursor position
-  const globalPos = lines.slice(0, lineClicked).reduce((acc, val) => acc + val.length + 1, 0) + charIndex;
-
-  cursorPos = globalPos;
-  clearSelection();
-  renderEditor();
-
-  // Focus hidden textarea to catch keyboard input
-  textarea.focus();
-});
-
-// --- Sync textarea content with code, keep hidden for clipboard ---
-textarea.value = code;
-textarea.focus();
-textarea.style.width = '0';
-textarea.style.height = '0';
-
-textarea.addEventListener('input', () => {
-  if (isTypingEffect) return; // ignore input during typewriter effect
-  code = textarea.value;
-  cursorPos = textarea.selectionStart;
-  clearSelection();
-  renderEditor();
-});
-
-// Keep textarea selection synced with canvas cursor
-function syncTextareaCursor() {
-  textarea.selectionStart = cursorPos;
-  textarea.selectionEnd = cursorPos;
-}
-
-// --- Focus canvas and hidden textarea on click for keyboard input ---
-canvas.addEventListener('click', () => {
-  textarea.focus();
-  syncTextareaCursor();
-});
-
-// --- Initial render & cursor blink ---
-toggleCursorBlink();
-renderEditor();
-textarea.focus();
-
-let speed = 30;
-
- document.getElementById('speed').addEventListener('input',(e)=>{
-   speed = e.target.value;
-    })
-// --- Typewriter animation with syntax highlighting ---
-function runTypewriterAnimation(callback) {
-  isTypingEffect = true;
-  clearInterval(cursorInterval);
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-   ctx.fillStyle = bgcolor;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-
-  const lines = code.split('\n');
-  let curLine = 0;
-  let curCharIndex = 0;
-  let x = 40;
-  let y = 40 + lineHeight;
-
-  function drawNextChar() {
-    if (curLine >= lines.length) {
-      isTypingEffect = false;
-      toggleCursorBlink();
-      renderEditor();
-      textarea.focus();
-      if(callback) callback();
-      return;
-    }
-    const line = lines[curLine];
-    if (curCharIndex >= line.length) {
-      // Move to next line
-      curLine++;
-      curCharIndex = 0;
-      x = 40;
-      y += lineHeight;
-      setTimeout(drawNextChar, 100);
-      return;
+      ctx.putImageData(imageData, 0, 0);
     }
 
-    // Find token containing this char for color
-    const tokens = tokenizeLine(line);
-    let charColor = '#CCCCCC'; // default grey
-    let char = line[curCharIndex];
-    let runningLength = 0;
-    for (const token of tokens) {
-      if (curCharIndex < runningLength + token.text.length) {
-        if(token.type === 'keyword') charColor = '#569CD6';
-        else if(token.type === 'string') charColor = '#D69D85';
-        else charColor = '#CCCCCC';
-        break;
-      }
-      runningLength += token.text.length;
-    }
-
-    ctx.fillStyle = charColor;
-    ctx.fillText(char, x, y);
-    x += ctx.measureText(char).width;
-    curCharIndex++;
-
-    setTimeout(drawNextChar, speed);
-  }
-
-  drawNextChar();
-}
-
-// --- Button handlers ---
-typewriterBtn.onclick = () => {
-  if(isTypingEffect) return;
-  runTypewriterAnimation();
-};
-
-recordBtn.onclick = async () => {
-  if (isTypingEffect) return;
-
-  // Setup MediaRecorder for canvas stream
-  const stream = canvas.captureStream(30); // 30 FPS
-  const recorder = new MediaRecorder(stream, { mimeType: "video/webm;codecs=vp9" });
-
-  let chunks = [];
-  recorder.ondataavailable = e => {
-    if (e.data.size > 0) chunks.push(e.data);
-  };
-
-  recorder.onstop = () => {
-    const blob = new Blob(chunks, { type: "video/webm" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = url;
-    a.download = 'typewriter-recording.webm';
-    document.body.appendChild(a);
-    a.click();
-    URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-    chunks = [];
-  };
-
-  recorder.start();
-  runTypewriterAnimation(() => {
-    recorder.stop();
-  });
-};
-
-</script>
-
-
-<script>
-
-</script>
+    generateNoise();
+    setInterval(generateNoise, 50); // Refresh noise every 50ms
+  </script>
+</body>
+</html>
