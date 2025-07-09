@@ -2,7 +2,7 @@ import Link from "next/link"
 export default function Footer(){
    
     return (
-        <div>
+        <div className="">
            <Section/>
        
           <div className="w-full flex-col sm:flex-row flex justify-center sm:gap-[120px] gap-16 items-center] sm:p-20 p-8 bg-[#171717]">
@@ -54,7 +54,7 @@ export default function Footer(){
 }
 
 function Section(){
-    return(    <div className="bg-[#f2f2f2]  sm:p-[200px] p-5 ">
+    return(    <div className="bg-[#f2f2f2]  max-w-7xl mx-auto ">
 
       <div className="text-3xl">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet exercitationem nostrum magnam voluptate molestias dolor eaque repellat maiores excepturi <span className="text-black"> velit rem eos necessitatibus, quasi voluptatem veniam alias blanditiis voluptates consequuntur! Lorem ipsum dolor sit amet consectetur adipisicing elit.</span> Dolorem odio debitis nihil amet. Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem adipisci corrupti, sequi laboriosam perferendis eveniet nihil exercitationem dolores, commodi corporis nam consectetur expedita.</div>
 

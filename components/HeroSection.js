@@ -2,27 +2,31 @@ import Image from "next/image"
 export default function HeroSection(){
    
     return (
-       <div>
-         <div className="w-full flex justify-around  items-center h-[70vh] ml-3">
-               <div className="sm:text-[80px] text-[60px] text-white  ">
-                 Human 
-                 <div className="mb-10 mt-[-30px]">Centric Solutions</div>
-                 <p className="sm:w-[50%] text-[18px] text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum laudantium vitae quos aliquid inventore ullam? Eius a inventore vero possimus minus. Soluta, labore.</p>
-               </div>
+       <div className="w-full  my-[180px] ">
+       
+         <div className="mx-auto px-6 max-w-7xl flex flex-col justify-center gap-8 items-center">
+          
+             <h1 className="sm:text-[80px]  text-[50px] max-w-2xl text-center  text-[#f2f2f2] font-bold "> think  different </h1>
+             <p className="max-w-lg text-center">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus illum sapiente, dolore, ut placeat, perspiciatis quod ipsa consequatur eveniet corporis asperiores omnis nisi.</p>
+             
+            <div className="flex gap-4"> <button className="bg-[#f2f2f2] cursor-pointer font-medium shadow-[0px_0px_15px_0px_#d8d8fa] rounded-2xl py-1 text-black px-7">Start a Project</button>
+             <button className="bg-[#242424] cursor-pointer rounded-2xl py-1 text-white px-7">Portfolio</button></div>
 
               
         </div>
-        <Section></Section>
+        {/* <Section></Section> */}
        </div>
     )
 }
 
 
 function Section(){
-    return ( <div className="sm:p-20 p-2 flex justify-center">
-    <div className="bg-[#101010] h-[60vh] sm:w-[70%] w-[100%] flex justify-center items-center shadow-[0px_-49px_123px_36px_#9672e9] rounded-2xl">
-    {/* <Image src='/pr1.png' width="800" height="100"/> */}
-    <video autoPlay muted loop src="/promo.mp4" height={200} width={400}></video>
+    return ( 
+    <div className="bg-[#101010]  mt-[120px] mx-auto max-w-7xl  flex justify-center items-center shadow-[0px_-49px_123px_36px_#066dff] rounded-2xl">
+  
+    {/* <video autoPlay muted loop src="/promo.mp4" height={200} width={400}></video> */}
+  
     </div>
-  </div>)
+  )
+
 }

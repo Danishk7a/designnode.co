@@ -11,18 +11,23 @@ const ScrollAnimation = () => {
     gsap.fromTo(
       ".box1", 
       {
-        backgroundColor: '#171717',  // Initial color
-        x: -200,                    // Start position (off-screen left)
+        color: '#757575',
+        // filter:'blur(1px)'
+        // Initial color
+        // x: -200,  
+        // 
+                      // Start position (off-screen left)
       },
       {
-        backgroundColor: '#ff0000',  // End color
+        color: '#303030', 
+         // End color
         x: 0,                       // End position (centered)
         scrollTrigger: {
           trigger: ".box1",         // Trigger the animation when .box1 enters the viewport
-          start: "top 80%",          // When the top of the box reaches 80% of the viewport
-          end: "top 30%",            // When the top of the box reaches 30% of the viewport
+          start: "top 30%",          // When the top of the box reaches 80% of the viewport
+          end: "top 10%",            // When the top of the box reaches 30% of the viewport
           scrub: true,               // Smooth scrolling
-          markers: true,             // Show markers for debugging
+          // markers: true,             // Show markers for debugging
           toggleActions: "play reverse play reverse", // Reverse when scrolling up
           onComplete: () => {        // Callback when animation is completed (end of the scroll)
             console.log("Box 1 animation completed!");
@@ -35,7 +40,7 @@ const ScrollAnimation = () => {
           onLeave: () => {            // Callback when the animation leaves the viewport
             console.log("Box 1 has left the viewport.");
             gsap.to(".box1", {
-              backgroundColor: "#171717", // Change back to original color when leaving
+              color: "#303030", // Change back to original color when leaving
               scale: 1,                    // Reset scale
               duration: 1,                 // Duration of reset
             });
@@ -44,22 +49,21 @@ const ScrollAnimation = () => {
       }
     );
 
-    // Create animation for .box2
     gsap.fromTo(
       ".box2", 
       {
-        opacity: 0,                // Initial opacity
-        x: 200,                    // Start position (off-screen right)
+        color: '#757575',                // Initial opacity
+        // x: 200,                    // Start position (off-screen right)
       },
       {
-        opacity: 1,                // End opacity
+        color: '#ffffff',                // End opacity
         x: 0,                      // End position (centered)
         scrollTrigger: {
           trigger: ".box2",        // Trigger the animation when .box2 enters the viewport
-          start: "top 80%",         // When the top of the box reaches 80% of the viewport
-          end: "top 30%",           // When the top of the box reaches 30% of the viewport
+          start: "top 30%",         // When the top of the box reaches 80% of the viewport
+          end: "top 10%",           // When the top of the box reaches 30% of the viewport
           scrub: true,              // Smooth scrolling
-          markers: true,            // Show markers for debugging
+          // markers: true,            // Show markers for debugging
           toggleActions: "play reverse play reverse", // Reverse when scrolling up
           onComplete: () => {        // Callback when animation is completed (end of the scroll)
             console.log("Box 2 animation completed!");
@@ -73,9 +77,46 @@ const ScrollAnimation = () => {
           onLeave: () => {           // Callback when the animation leaves the viewport
             console.log("Box 2 has left the viewport.");
             gsap.to(".box2", {
-              opacity: 0,            // Reset opacity when leaving
               scale: 1,              // Reset scale
-              backgroundColor: "#171717", // Reset color
+              color: "#ffffff", // Reset color
+              duration: 1,           // Duration of reset
+            });
+          },
+        },
+      }
+    );
+
+
+        gsap.fromTo(
+      ".box2", 
+      {
+        color: '#757575',                // Initial opacity
+        // x: 200,                    // Start position (off-screen right)
+      },
+      {
+        color: '#ffffff',                // End opacity
+        x: 0,                      // End position (centered)
+        scrollTrigger: {
+          trigger: ".box3",        // Trigger the animation when .box2 enters the viewport
+          start: "top 30%",         // When the top of the box reaches 80% of the viewport
+          end: "top 10%",           // When the top of the box reaches 30% of the viewport
+          scrub: true,              // Smooth scrolling
+          // markers: true,            // Show markers for debugging
+          toggleActions: "play reverse play reverse", // Reverse when scrolling up
+          onComplete: () => {        // Callback when animation is completed (end of the scroll)
+            console.log("Box 2 animation completed!");
+            gsap.to(".box3", {
+              opacity: 0.5,          // Change opacity after completion
+              scale: 1.5,            // Optional: Scale the box
+              backgroundColor: "#ff00ff", // Change to purple after completion
+              duration: 1,           // Duration of the transition
+            });
+          },
+          onLeave: () => {           // Callback when the animation leaves the viewport
+            console.log("Box 2 has left the viewport.");
+            gsap.to(".box3", {
+              scale: 1,              // Reset scale
+              color: "#ffffff", // Reset color
               duration: 1,           // Duration of reset
             });
           },
@@ -85,29 +126,25 @@ const ScrollAnimation = () => {
   }, []);
 
   return (
-    <div style={{ height: "200vh" }}>
-      <div className="box1" style={boxStyle}>
-        Box 1 (Left to Right)
+    <div className="p-6" style={{ height: "100vh" }}>
+      <div className="box1 text-2xl" >
+     Lorem ipsum dolor sit, amet consectetur 
+      <div className="box2 text-2xl" >
+     We control your Sight
       </div>
-      <div className="box2" style={boxStyle}>
-        Box 2 (Right to Left)
+       adipisicing elit. Facere eaque consequatur commodi distinctio maxime cum repudiandae iure ad. Repudiandae distinctio quidem quisquam expedita.
+       Lorem ipsum dolor sit amet consectetur adipisicing elit. Corporis expedita quas aperiam harum. Perspiciatis repudiandae nisi iusto repellat sunt, consectetur praesentium quo sed.      <div className="box3 text-2xl" >
+     guide your Attention
       </div>
+      </div>
+
+
+
+     
     </div>
   );
 };
 
-// Simple styles for both boxes
-const boxStyle = {
-  width: "200px",
-  height: "200px",
-  backgroundColor: "coral",  // Initial background color
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  color: "#fff",
-  fontSize: "24px",
-  borderRadius: "8px",
-  margin: "50px auto",
-};
+
 
 export default ScrollAnimation;

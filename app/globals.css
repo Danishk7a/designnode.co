@@ -19,6 +19,9 @@
   }
 }
 
+h1{
+  font-family: var(--font-inter);
+}
 body {
   background: var(--background);
   color: var(--foreground);
@@ -26,10 +29,10 @@ body {
 }
 
 button{
-  background-color: #8566CE;
+  /* background-color: #8566CE;
   color: #f2f2f2;
   border: none;
   border-radius: 9px;
   font-size: 13px;
-  padding: 3px 18px;
+  padding: 3px 18px; */
 }
