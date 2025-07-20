@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import { Inter } from 'next/font/google'
+import LenisProvider from "@/components/LenisProvider";
 
 import "./globals.css";
 
@@ -36,8 +37,11 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      >        <LenisProvider>
+
         {children}
+                </LenisProvider>
+
       </body>
     </html>
   );
