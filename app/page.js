@@ -5,6 +5,7 @@ import Testimonials from "@/components/Testimonials";
 import OurClients from "@/components/OurClients";
 import OurProcess from "@/components/OurProcess";
 import Footer from "../components/Footer";
+import Carousel3D from "@/components/Carousel3D";
 import Image from "next/image";
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
   <OurProcess/>
   <Testimonials/>
   <OurClients/>
+  <Carousel3D/>
   <Footer/>
 
 </div>

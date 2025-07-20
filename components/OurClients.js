@@ -23,7 +23,7 @@ export default function ClientLogoSlider() {
 
   return (
     <div className="overflow-hidden whitespace-nowrap w-full bg-black py-20">
-      <div className="slider-track flex w-max gap-12 animate-slide">
+      <div className="max-w-md slider-track flex w-max gap-12 animate-slide">
         {loopedLogos.map((logo, index) => (
           <div key={index} className="relative w-32 h-16 flex-shrink-0">
             <Image
